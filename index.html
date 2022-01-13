@@ -1,0 +1,108 @@
+<head>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.1/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel" src="index.js"></script>
+</head>
+
+
+<div id="app">
+    <svg id="svg" ref="svg" xmlns="http://www.w3.org/2000/svg" :view-box.camel="viewBox">
+      <defs>
+        <g id="svg-group">
+          <template v-for="e in layer.elements">
+            <path v-if="e.type=='path'" :d="e.d" :style="estyle(e)" class="path" />
+          </template>
+          <path v-if="current.type=='path'" :d="pathd(current.points)" :style="estyle(current)" class="path" />
+        </g>
+      </defs>
+      <transition enter-active-class="fadeIn animated" leave-active-class="fadeOut animated">
+        <template v-if="showMarks">
+          <g v-if="layer.mirror" id="svg-marks" :transform="transform">
+            <line v-for="i in layer.repeat*2" :transform="rotatePart(i, layer.repeat*2)" stroke="#ccc" stroke-width="1" x1="0" y1="0" x2="1000" y2="0"></line>
+          </g>
+          <g v-else id="svg-marks" :transform="transform">
+            <line v-if="layer.repeat>1" v-for="i in layer.repeat" :transform="rotatePart(i, layer.repeat)" stroke="#ccc" stroke-width="1" x1="0" y1="0" x2="1000" y2="0"></line>
+          </g>
+        </template>
+      </transition>
+      <g id="svg-mandala" :transform="transform">
+        <g id="svg-layer">
+          <template v-for="i in layer.repeat">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-group"
+              :transform="rotatePart(i, layer.repeat)"></use>
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-group"
+              :transform="rotatePart(i, layer.repeat)+' scale(1,-1)'" v-if="layer.mirror"></use>
+          </template>
+        </g>
+      </g>
+    </svg>
+  
+    <div id="overlay" v-on:mousedown="onMouseDown" v-on:mousemove="onMouseMove" v-on:mouseup="onMouseEnd"
+      v-on:mouseleave="onMouseEnd" v-on:wheel="onMouseWheel" v-on:touchstart="onTouchStart" v-on:touchmove="onTouchMove"
+      v-on:touchend="onTouchEnd" v-on:touchleave="onTouchEnd"></div>
+  
+    <div id="toolbar">
+  
+      <div class="tbtn tbtn-clear" @click="onReset">
+        <i class="ibtn far fa-file"></i>
+      </div>
+      <div class="tbtn tbtn-undo" @click="onCtrlZ">
+        <i class="ibtn fas fa-undo"></i>
+      </div>
+  
+      <div class="tbtn tbtn-color" @click="showPalette=!showPalette">
+        <div id="color" :style="{ 'background-color': strokeColor }"></div>
+        <transition enter-active-class="fadeIn animated" leave-active-class="fadeOut animated">
+          <ul v-if="showPalette" class="colors toggle" @click.stop>
+            <li v-for="color in palette" @click.stop="strokeColor=color;showPalette=false;"
+              :style="{ 'background-color': color }" :class="{ active: strokeColor==color }"></li>
+          </ul>
+        </transition>
+      </div>
+  
+      <div class="tbtn tbtn-stroke" @click="showStroke=!showStroke">
+        <i class="ibtn fas fa-pencil-alt"></i>
+        <transition enter-active-class="fadeIn animated" leave-active-class="fadeOut animated">
+          <div v-if="showStroke" id="stroke" class="toggle" @click.stop>
+            <div>Stroke width : {{ strokeWidth }}px</div>
+            <input v-model="strokeWidth" type="range" min="0.2" max="20" step="0.2" class="custom-range">
+            <div>Precision : {{ strokePrecision }}px</div>
+            <input v-model="strokePrecision" type="range" min="1" max="100" class="custom-range">
+          </div>
+        </transition>
+      </div>
+  
+      <div class="tbtn tbtn-zoomout" @click="zoomOut">
+        <i class="ibtn fas fa-search-minus"></i>
+      </div>
+      <div id="zoom-info">{{ zoom }} %</div>
+      <div class="tbtn tbtn-zoomin" @click="zoomIn">
+        <i class="ibtn fas fa-search-plus"></i>
+      </div>
+      
+      <div class="tbtn tbtn-layer" @click="showLayer=!showLayer">
+        <i class="ibtn fas fa-cog"></i>
+        <transition enter-active-class="fadeIn animated" leave-active-class="fadeOut animated">
+          <div v-if="showLayer" id="layer" class="toggle" @click.stop>
+            <switch-btn v-model="showMarks" id="showMarks" label="Show marks"></switch-btn>
+            <switch-btn v-model="layer.mirror" id="mirror" label="Mirror"></switch-btn>
+            <div class="form-group">
+              <label for="repeat">Repeat : {{ repeat }}</label>
+              <input v-model="repeat" id="repeat" type="range" min="1" max="20" step="1" class="custom-range">
+            </div>
+          </div>
+        </transition>
+      </div>
+    </div>
+  
+  </div>
+  
+  <script type="x-template" id="switchBtn">
+    <div class="custom-control custom-switch">
+      <input type="checkbox" :checked="value" @input="$emit('input', $event.target.checked)" class="custom-control-input" :id="id">
+      <label :for="id" class="custom-control-label">{{ label }}</label>
+    </div>
+  </script>
+  
