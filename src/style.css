@@ -1,0 +1,141 @@
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+}
+
+#svg {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.path {
+  stroke: #000;
+  stroke-width: 1px;
+  fill: none;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+#overlay {
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  cursor: crosshair;
+}
+
+/* toolbar */
+#toolbar {
+  display: flex;
+  position: fixed;
+  z-index: 30;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  background: #f0f0f0;
+  box-shadow: 0 2px 4px #c0c0c0;
+  justify-content: center;
+}
+
+#toolbar>* {
+  margin: 0;
+  line-height: 40px;
+}
+
+.tbtn {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: rgba(255, 255, 255, 0);
+  padding: 0 15px;
+}
+
+.tbtn:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.ibtn {
+  font-size: 20px;
+  line-height: 40px;
+  color: #ccc;
+}
+
+.tbtn:hover .ibtn {
+  color: #555;
+}
+
+.itbtn.active {
+  color: #666;
+}
+
+.tbtn:hover .ibtn.active {
+  color: #333;
+}
+
+.toggle {
+  position: absolute;
+  z-index: 25;
+  box-sizing: border-box;
+  background: #fff;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 4px #555;
+  text-align: left;
+  line-height: initial;
+  animation-duration: 0.2s;
+}
+
+#zoom-info {
+  padding: 0 5px;
+  font-size: 14px;
+}
+
+#stroke {
+  width: 200px;
+  margin-left: -90px;
+}
+#layer {
+  width: 200px;
+  margin-left: -160px;
+}
+
+/* toolbar - color */
+#color {
+  margin: 10px 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-shadow: 1px 1px 3px #888;
+  cursor: pointer;
+}
+
+.colors {
+  list-style: none;
+  width: 254px;
+  margin-left: -117px;
+}
+
+.colors li {
+  float: left;
+  margin: 3px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.colors li.active {
+  border-color: #000;
+}
