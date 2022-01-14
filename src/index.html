@@ -9,6 +9,7 @@
         <path v-if="current.type=='path'" :d="pathd(current.points)" :style="estyle(current)" class="path" />
       </g>
     </defs>
+
     <transition enter-active-class="fadeIn animated" leave-active-class="fadeOut animated">
       <template v-if="showMarks">
         <g v-if="layer.mirror" id="svg-marks" :transform="transform">
@@ -19,6 +20,7 @@
         </g>
       </template>
     </transition>
+    
     <g id="svg-mandala" :transform="transform">
       <g id="svg-layer">
         <template v-for="i in layer.repeat">

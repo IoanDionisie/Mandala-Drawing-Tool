@@ -9,7 +9,7 @@ Vue.component('switch-btn', {
   props: ['id', 'label', 'value'],
   template: '#switchBtn' });
 
-
+  
 new Vue({
   el: '#app',
   data: {
@@ -34,7 +34,9 @@ new Vue({
     showPalette: false,
     showStroke: false,
     showLayer: false,
-    showMarks: true },
+    showMarks: true,
+    darkTheme: false
+    },
 
 
   watch: {
@@ -61,7 +63,9 @@ new Vue({
         this.showPalette = false;
         this.showStroke = false;
       }
-    } },
+    }
+  
+  },
 
 
   computed: {
@@ -102,6 +106,7 @@ new Vue({
       this.x0 = this.x1;this.y0 = this.y1;
       this.current.points = [[this.x1, this.y1], [this.x1, this.y1]];
     },
+
     onInputMove(e) {
       let points = this.current.points;
       const dx = this.x1 - this.x0;
@@ -109,12 +114,14 @@ new Vue({
       if (dx * dx + dy * dy > this.strokePrecision) points.push([this.x0 = this.x1, this.y0 = this.y1]);else
       this.$set(points, points.length - 1, [this.x1, this.y1]);
     },
+
     onInputEnd(e) {
       if (this.current.points.length > 1) {
         this.layer.elements.push({ ...this.current, d: this.pathd(this.current.points) });
       }
       this.resetPath(this.current);
     },
+
     updateInputCoords(e) {
       this.x1 = this.vbX + this.currX * (this.vbW / this.width) - this.cx;
       this.y1 = this.vbY + this.currY * (this.vbH / this.height) - this.cy;
@@ -131,19 +138,23 @@ new Vue({
       this.cy = r.height / 2;
       this.updateViewBox();
     },
+
     onMouseWheel(e) {
       e.preventDefault();
       if (e.deltaY < 0) this.zoomIn();else
       this.zoomOut();
     },
+
     zoomIn() {
       this.zoom = Math.min(195, this.zoom + 5);
       this.updateViewBox();
     },
+
     zoomOut() {
       this.zoom = Math.max(5, this.zoom - 5);
       this.updateViewBox();
     },
+
     updateViewBox() {
       this.vbX = (this.width * this.zoom / 100 - this.width) / 2;
       this.vbY = (this.height * this.zoom / 100 - this.height) / 2;
@@ -157,9 +168,11 @@ new Vue({
         this.onCtrlZ();
       }
     },
+
     onCtrlZ() {
       this.layer.elements.pop();
     },
+
     onReset() {
       this.layer.elements = [];
     },
@@ -173,12 +186,15 @@ new Vue({
         'stroke-width': e.strokeWidth };
 
     },
+
     rotatePart(i, n) {
       return this.rotate(i * 360 / n);
     },
+
     translate(x, y) {
       return 'translate(' + x + ', ' + y + ')';
     },
+
     rotate(r) {
       return 'rotate(' + r + ')';
     } } });
@@ -260,3 +276,4 @@ function mouseMixin() {
 function rnd(max, negative) {
   return negative ? Math.random() * 2 * max - max : Math.random() * max;
 }
+

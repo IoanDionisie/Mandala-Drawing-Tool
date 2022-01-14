@@ -11,9 +11,10 @@
 </head>
 <body>
 <!-- partial:index.partial.html -->
-<div id="app">
 
-  <svg id="svg" ref="svg" xmlns="http://www.w3.org/2000/svg" :view-box.camel="viewBox">
+<div id="app">
+  <button class="save-on-click" onclick="sendSVG();">Save as SVG File</button>
+  <svg id="svg" ref="svg" xmlns="http://www.w3.org/2000/svg" :view-box.camel="viewBox" :class="{ 'dark-theme-background': darkTheme == true }">
     <defs>
       <g id="svg-group">
         <template v-for="e in layer.elements">
@@ -99,6 +100,11 @@
           </div>
         </div>
       </transition>
+    </div>
+
+    <div class="tbtn"  @click="darkTheme=!darkTheme">
+      <i v-if="darkTheme" class="ibtn fas fa-moon"></i>
+      <i v-if="!darkTheme" class="ibtn fas fa-sun"></i>
     </div>
   </div>
 

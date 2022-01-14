@@ -16,6 +16,13 @@ body {
   height: 100%;
 }
 
+.save-on-click {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 99999;
+}
+
 .path {
   stroke: #000;
   stroke-width: 1px;
@@ -138,4 +145,13 @@ body {
 
 .colors li.active {
   border-color: #000;
+}
+
+
+.light-theme-background {
+  background: white;
+}
+
+.dark-theme-background {
+  background: #121212;
 }
