@@ -1,3 +1,4 @@
+
 const palette = [
 "#9BDAF3", "#D8CCF4", "#FAC2BB", "#F8CD94", "#9EDDDD", "#FBE491", "#FFC4E4", "#C7E59A", "#D0D3D6",
 "#34B3E4", "#A589D9", "#F16D64", "#F59640", "#35BEC1", "#F3C746", "#F371AF", "#95C753", "#A0A3A6",
@@ -15,6 +16,7 @@ new Vue({
   data: {
     strokeWidth: 1,
     strokeColor: '#008CC9',
+    showToolbar: true,
     strokePrecision: 100,
     repeat: 7,
     width: 0, height: 0,
@@ -197,7 +199,13 @@ new Vue({
 
     rotate(r) {
       return 'rotate(' + r + ')';
-    } } });
+    },
+    
+    toggleToolbar() {
+      this.showToolbar = !this.showToolbar;
+    }
+    
+  } });
 
 
 

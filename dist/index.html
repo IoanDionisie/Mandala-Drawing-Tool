@@ -48,66 +48,70 @@
   <div id="overlay" v-on:mousedown="onMouseDown" v-on:mousemove="onMouseMove" v-on:mouseup="onMouseEnd"
     v-on:mouseleave="onMouseEnd" v-on:wheel="onMouseWheel" v-on:touchstart="onTouchStart" v-on:touchmove="onTouchMove"
     v-on:touchend="onTouchEnd" v-on:touchleave="onTouchEnd"></div>
-
-  <div id="toolbar">
-
-    <div class="tbtn tbtn-clear" @click="onReset">
-      <i class="ibtn far fa-file"></i>
-    </div>
-    <div class="tbtn tbtn-undo" @click="onCtrlZ">
-      <i class="ibtn fas fa-undo"></i>
-    </div>
-
-    <div class="tbtn tbtn-color" @click="showPalette=!showPalette">
-      <div id="color" :style="{ 'background-color': strokeColor }"></div>
-      <transition enter-active-class="fadeIn animated" leave-active-class="fadeOut animated">
-        <ul v-if="showPalette" class="colors toggle" @click.stop>
-          <li v-for="color in palette" @click.stop="strokeColor=color;showPalette=false;"
-            :style="{ 'background-color': color }" :class="{ active: strokeColor==color }"></li>
-        </ul>
-      </transition>
-    </div>
-
-    <div class="tbtn tbtn-stroke" @click="showStroke=!showStroke">
-      <i class="ibtn fas fa-pencil-alt"></i>
-      <transition enter-active-class="fadeIn animated" leave-active-class="fadeOut animated">
-        <div v-if="showStroke" id="stroke" class="toggle" @click.stop>
-          <div>Stroke width : {{ strokeWidth }}px</div>
-          <input v-model="strokeWidth" type="range" min="0.2" max="20" step="0.2" class="custom-range">
-          <div>Precision : {{ strokePrecision }}px</div>
-          <input v-model="strokePrecision" type="range" min="1" max="100" class="custom-range">
-        </div>
-      </transition>
-    </div>
-
-    <div class="tbtn tbtn-zoomout" @click="zoomOut">
-      <i class="ibtn fas fa-search-minus"></i>
-    </div>
-    <div id="zoom-info">{{ zoom }} %</div>
-    <div class="tbtn tbtn-zoomin" @click="zoomIn">
-      <i class="ibtn fas fa-search-plus"></i>
-    </div>
     
-    <div class="tbtn tbtn-layer" @click="showLayer=!showLayer">
-      <i class="ibtn fas fa-cog"></i>
-      <transition enter-active-class="fadeIn animated" leave-active-class="fadeOut animated">
-        <div v-if="showLayer" id="layer" class="toggle" @click.stop>
-          <switch-btn v-model="showMarks" id="showMarks" label="Show marks"></switch-btn>
-          <switch-btn v-model="layer.mirror" id="mirror" label="Mirror"></switch-btn>
-          <div class="form-group">
-            <label for="repeat">Repeat : {{ repeat }}</label>
-            <input v-model="repeat" id="repeat" type="range" min="1" max="20" step="1" class="custom-range">
+  <div id="toolbar" class="custom-toolbar-left" :class="{ 'toggled-off': showToolbar == false }">
+    <div class="tbtn toolbar-toggle" @click="toggleToolbar">
+      <i v-if="showToolbar" class="ibtn fas fa-chevron-left"></i>
+      <i v-if="!showToolbar" class="ibtn fas fa-chevron-right"></i>
+    </div>
+    <div class="toolbar-icons">
+      <div class="tbtn tbtn-clear" @click="onReset">
+        <i class="ibtn far fa-file"></i>
+      </div>
+      <div class="tbtn tbtn-undo" @click="onCtrlZ">
+        <i class="ibtn fas fa-undo"></i>
+      </div>
+  
+      <div class="tbtn tbtn-color" @click="showPalette=!showPalette">
+        <div id="color" :style="{ 'background-color': strokeColor }"></div>
+        <transition enter-active-class="fadeIn animated" leave-active-class="fadeOut animated">
+          <ul v-if="showPalette" class="colors toggle" @click.stop>
+            <li v-for="color in palette" @click.stop="strokeColor=color;showPalette=false;"
+              :style="{ 'background-color': color }" :class="{ active: strokeColor==color }"></li>
+          </ul>
+        </transition>
+      </div>
+  
+      <div class="tbtn tbtn-stroke" @click="showStroke=!showStroke">
+        <i class="ibtn fas fa-pencil-alt"></i>
+        <transition enter-active-class="fadeIn animated" leave-active-class="fadeOut animated">
+          <div v-if="showStroke" id="stroke" class="toggle" @click.stop>
+            <div>Stroke width : {{ strokeWidth }}px</div>
+            <input v-model="strokeWidth" type="range" min="0.2" max="20" step="0.2" class="custom-range">
+            <div>Precision : {{ strokePrecision }}px</div>
+            <input v-model="strokePrecision" type="range" min="1" max="100" class="custom-range">
           </div>
-        </div>
-      </transition>
+        </transition>
+      </div>
+  
+      <div class="tbtn tbtn-zoomout" @click="zoomOut">
+        <i class="ibtn fas fa-search-minus"></i>
+      </div>
+      <div id="zoom-info">{{ zoom }} %</div>
+      <div class="tbtn tbtn-zoomin" @click="zoomIn">
+        <i class="ibtn fas fa-search-plus"></i>
+      </div>
+      
+      <div class="tbtn tbtn-layer" @click="showLayer=!showLayer">
+        <i class="ibtn fas fa-cog"></i>
+        <transition enter-active-class="fadeIn animated" leave-active-class="fadeOut animated">
+          <div v-if="showLayer" id="layer" class="toggle" @click.stop>
+            <switch-btn v-model="showMarks" id="showMarks" label="Show marks"></switch-btn>
+            <switch-btn v-model="layer.mirror" id="mirror" label="Mirror"></switch-btn>
+            <div class="form-group">
+              <label for="repeat">Repeat : {{ repeat }}</label>
+              <input v-model="repeat" id="repeat" type="range" min="1" max="20" step="1" class="custom-range">
+            </div>
+          </div>
+        </transition>
+      </div>
+  
+      <div class="tbtn"  @click="darkTheme=!darkTheme">
+        <i v-if="darkTheme" class="ibtn fas fa-moon"></i>
+        <i v-if="!darkTheme" class="ibtn fas fa-sun"></i>
+      </div>
     </div>
-
-    <div class="tbtn"  @click="darkTheme=!darkTheme">
-      <i v-if="darkTheme" class="ibtn fas fa-moon"></i>
-      <i v-if="!darkTheme" class="ibtn fas fa-sun"></i>
     </div>
-  </div>
-
 </div>
 
 <script type="x-template" id="switchBtn">
