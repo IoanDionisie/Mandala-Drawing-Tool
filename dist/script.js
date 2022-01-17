@@ -281,7 +281,9 @@ function mouseMixin() {
 
 }
 
+
 function rnd(max, negative) {
+  console.log("testing")
   return negative ? Math.random() * 2 * max - max : Math.random() * max;
 }
 
